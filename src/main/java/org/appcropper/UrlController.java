@@ -42,4 +42,10 @@ public class UrlController {
         headers.setCacheControl("no-cache, no-store, must-revalidate");
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
+
+    @GetMapping("delete")
+    public List<UrlShortedDTO> delete(@RequestParam String shortUrl) {
+        urlService.deleteUrl(shortUrl);
+        return urlService.getAll();
+    }
 }
