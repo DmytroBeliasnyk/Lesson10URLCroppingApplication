@@ -3,21 +3,28 @@ package org.appcropper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class UrlController {
     private final UrlService urlService;
+//    private final UrlTimer timer = new UrlTimer();
 
     public UrlController(UrlService urlService) {
         this.urlService = urlService;
+//        timer.setUrlService(urlService);
     }
 
     @GetMapping("shorten")
-    public UrlShortedDTO shorten(@RequestParam String url) {
+    public UrlShortedDTO shorten(@RequestParam String url,
+                                 @RequestParam long time) {
         UrlDTO urlDTO = new UrlDTO();
         urlDTO.setUrl(url);
         String id = urlService.saveUrl(urlDTO);
@@ -25,6 +32,18 @@ public class UrlController {
         UrlShortedDTO shorted = new UrlShortedDTO();
         shorted.setShortUrl(id);
         shorted.setUrl(urlDTO.getUrl());
+
+        Thread th = new Thread(() -> {
+            try {
+                Thread.sleep(TimeUnit.MINUTES.toMillis(time));
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            urlService.deleteUrl(id);
+        });
+        th.setDaemon(true);
+        th.start();
+
         return shorted;
     }
 
