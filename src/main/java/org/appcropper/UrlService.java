@@ -41,4 +41,8 @@ public class UrlService {
         list.forEach(u -> result.add(u.toShortedDTO()));
         return result;
     }
+    @Transactional
+    public void deleteUrl(String id){
+        urlRepository.deleteById(id);
+    }
 }
