@@ -16,7 +16,7 @@ public class UrlService {
     }
 
     @Transactional
-    public Integer saveUrl(UrlDTO urlDTO) {
+    public String saveUrl(UrlDTO urlDTO) {
         UrlEntity urlEntity = urlRepository.findByUrl(urlDTO.getUrl());
         if (urlEntity == null) {
             urlEntity = new UrlEntity(urlDTO.getUrl());
@@ -26,7 +26,7 @@ public class UrlService {
     }
 
     @Transactional
-    public String getUrl(Integer id) {
+    public String getUrl(String id) {
         Optional<UrlEntity> urlOpt = urlRepository.findById(id);
         if (urlOpt.isEmpty())
             return null;

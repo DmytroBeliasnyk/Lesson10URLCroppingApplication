@@ -20,10 +20,10 @@ public class UrlController {
     public UrlShortedDTO shorten(@RequestParam String url) {
         UrlDTO urlDTO = new UrlDTO();
         urlDTO.setUrl(url);
-        Integer id = urlService.saveUrl(urlDTO);
+        String id = urlService.saveUrl(urlDTO);
 
         UrlShortedDTO shorted = new UrlShortedDTO();
-        shorted.setShortUrl(id.toString());
+        shorted.setShortUrl(id);
         shorted.setUrl(urlDTO.getUrl());
         return shorted;
     }
@@ -34,7 +34,7 @@ public class UrlController {
     }
 
     @GetMapping("my/{id}")
-    public ResponseEntity<Void> redirect(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> redirect(@PathVariable("id") String id) {
         String url = urlService.getUrl(id);
 
         HttpHeaders headers = new HttpHeaders();
