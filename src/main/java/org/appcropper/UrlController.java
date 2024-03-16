@@ -15,11 +15,9 @@ import java.util.concurrent.TimeUnit;
 @RestController
 public class UrlController {
     private final UrlService urlService;
-//    private final UrlTimer timer = new UrlTimer();
 
     public UrlController(UrlService urlService) {
         this.urlService = urlService;
-//        timer.setUrlService(urlService);
     }
 
     @GetMapping("shorten")
