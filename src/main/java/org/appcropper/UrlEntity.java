@@ -8,8 +8,7 @@ import jakarta.persistence.Id;
 @Entity
 public class UrlEntity {
     @Id
-    @GeneratedValue
-    private Integer id;
+    private String id;
     @Column(nullable = false)
     private String url;
 
@@ -18,13 +17,16 @@ public class UrlEntity {
 
     public UrlEntity(String url) {
         this.url = url;
+        String shortedUrl = url.substring(url.indexOf(":") + 3,
+                url.indexOf("/", url.indexOf(":") + 3));
+        this.id = shortedUrl;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -39,7 +41,7 @@ public class UrlEntity {
     public UrlShortedDTO toShortedDTO() {
         UrlShortedDTO urlShortedDTO = new UrlShortedDTO();
         urlShortedDTO.setUrl(url);
-        urlShortedDTO.setShortUrl(Integer.toString(id));
+        urlShortedDTO.setShortUrl(id);
         return urlShortedDTO;
     }
 
